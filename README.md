@@ -26,10 +26,9 @@ DrawableGameObject.h
 
 using namespace DirectX;
 
-
-
 struct SimpleVertex
 {
+
 	XMFLOAT3 Pos;
 	XMFLOAT3 Normal;
 	XMFLOAT2 TexCoord;
@@ -38,6 +37,7 @@ struct SimpleVertex
 class DrawableGameObject
 {
 public:
+
 	DrawableGameObject();
 	~DrawableGameObject();
 
@@ -58,6 +58,7 @@ public:
 	void								checkIsOnScreenAndFix(const XMMATRIX&  view, const XMMATRIX&  proj);
 
 protected:
+
 	void								setDirection(XMFLOAT3 direction); 
 
 	void								nearbyDrawables(const vecDrawables& drawList, const unsigned int index);
@@ -111,6 +112,7 @@ using namespace DirectX;
 
 DrawableGameObject::DrawableGameObject()
 {
+
 	m_pVertexBuffer = nullptr;
 	m_pIndexBuffer = nullptr;
 	m_pTextureResourceView = nullptr;
@@ -130,6 +132,7 @@ DrawableGameObject::DrawableGameObject()
 
 void DrawableGameObject::createRandomDirection()
 {
+
 	//Randomly generate a direction for each agent
 	float directionx = 2.0 * (rand() / (float)RAND_MAX) -1;
 	float directiony = 2.0 * (rand() / (float)RAND_MAX) -1;
@@ -141,6 +144,7 @@ void DrawableGameObject::createRandomDirection()
 
 void DrawableGameObject::setDirection(XMFLOAT3 direction)
 {
+
 	XMVECTOR v = XMLoadFloat3(&direction);
 	v = XMVector3Normalize(v);
 	XMStoreFloat3(&m_direction, v);
@@ -171,6 +175,7 @@ DrawableGameObject::~DrawableGameObject()
 
 HRESULT DrawableGameObject::initMesh(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
+
 	// Create vertex buffer
 	SimpleVertex vertices[] =
 	{
@@ -285,11 +290,13 @@ HRESULT DrawableGameObject::initMesh(ID3D11Device* pd3dDevice, ID3D11DeviceConte
 
 void DrawableGameObject::setPosition(XMFLOAT3 position)
 {
+
 	m_position = position;
 }
 
 void DrawableGameObject::update(float t, const vecDrawables& drawList, const unsigned int index)
 {
+
 	XMMATRIX mSpin = XMMatrixIdentity();
 
 	// create a list of nearby boids in the m_nearbyDrawables array
@@ -309,6 +316,7 @@ void DrawableGameObject::update(float t, const vecDrawables& drawList, const uns
 
 void DrawableGameObject::nearbyDrawables(const vecDrawables& drawList, const unsigned int index)
 {
+
 	if (m_nearbyDrawables == nullptr) {
 		if (drawList.size() == 0)
 			return;
@@ -337,6 +345,7 @@ void DrawableGameObject::nearbyDrawables(const vecDrawables& drawList, const uns
 
 void DrawableGameObject::furtherDrawables(const vecDrawables& drawList, const unsigned int index)
 {
+
 	if (m_furtherDrawables == nullptr) {
 		if (drawList.size() == 0)
 			return;
@@ -365,11 +374,13 @@ void DrawableGameObject::furtherDrawables(const vecDrawables& drawList, const un
 
 void DrawableGameObject::draw(ID3D11DeviceContext* pContext)
 {
+
 	pContext->DrawIndexed(NUM_VERTICES, 0, 0);
 }
 
 void DrawableGameObject::checkIsOnScreenAndFix(const XMMATRIX&  view, const XMMATRIX&  proj)
 {
+
 	XMFLOAT4 v4;
 	v4.x = m_position.x;
 	v4.y = m_position.y;
@@ -425,6 +436,7 @@ void DrawableGameObject::checkIsOnScreenAndFix(const XMMATRIX&  view, const XMMA
 
 XMFLOAT3 DrawableGameObject::calculateSeparationVector(const vecDrawables& drawList)
 {
+
 	XMFLOAT3 nearby = XMFLOAT3(0, 0, 0);
 	if (drawList.size() == 0 || m_nearbyDrawables == nullptr)
 		return m_direction;
@@ -461,6 +473,7 @@ XMFLOAT3 DrawableGameObject::calculateSeparationVector(const vecDrawables& drawL
 
 XMFLOAT3 DrawableGameObject::calculateAlignmentVector(const vecDrawables& drawList)
 {
+
 	XMFLOAT3 nearby = XMFLOAT3(0, 0, 0);
 	if (drawList.size() == 0 || m_furtherDrawables == nullptr)
 		return m_direction;
@@ -487,6 +500,7 @@ XMFLOAT3 DrawableGameObject::calculateAlignmentVector(const vecDrawables& drawLi
 
 XMFLOAT3 DrawableGameObject::calculateCohesionVector(const vecDrawables& drawList)
 {
+
 	XMFLOAT3 all = XMFLOAT3(0, 0, 0);
 
 	if (drawList.size() == 0 || m_furtherDrawables == nullptr)
@@ -517,6 +531,7 @@ XMFLOAT3 DrawableGameObject::calculateCohesionVector(const vecDrawables& drawLis
 
 XMFLOAT3 DrawableGameObject::addFloat3(XMFLOAT3& f1, XMFLOAT3& f2)
 {
+
 	XMFLOAT3 out;
 	out.x = f1.x + f2.x;
 	out.y = f1.y + f2.y;
@@ -527,6 +542,7 @@ XMFLOAT3 DrawableGameObject::addFloat3(XMFLOAT3& f1, XMFLOAT3& f2)
 
 XMFLOAT3 DrawableGameObject::subtractFloat3(XMFLOAT3& f1, XMFLOAT3& f2)
 {
+
 	XMFLOAT3 out;
 	out.x = f1.x - f2.x;
 	out.y = f1.y - f2.y;
@@ -537,6 +553,7 @@ XMFLOAT3 DrawableGameObject::subtractFloat3(XMFLOAT3& f1, XMFLOAT3& f2)
 
 XMFLOAT3 DrawableGameObject::multiplyFloat3(XMFLOAT3& f1, const float scalar)
 {
+
 	XMFLOAT3 out;
 	out.x = f1.x * scalar;
 	out.y = f1.y * scalar;
@@ -547,6 +564,7 @@ XMFLOAT3 DrawableGameObject::multiplyFloat3(XMFLOAT3& f1, const float scalar)
 
 XMFLOAT3 DrawableGameObject::divideFloat3(XMFLOAT3& f1, const float scalar)
 {
+
 	XMFLOAT3 out;
 	out.x = f1.x / scalar;
 	out.y = f1.y / scalar;
@@ -557,11 +575,13 @@ XMFLOAT3 DrawableGameObject::divideFloat3(XMFLOAT3& f1, const float scalar)
 
 float DrawableGameObject::magnitudeFloat3(XMFLOAT3& f1)
 {
+
 	return sqrt((f1.x * f1.x) + (f1.y * f1.y) + (f1.z * f1.z));
 }
 
 XMFLOAT3 DrawableGameObject::normaliseFloat3(XMFLOAT3& f1)
 {
+
 	float length = sqrt((f1.x * f1.x) + (f1.y * f1.y) + (f1.z * f1.z));
 
 	f1.x /= length;
